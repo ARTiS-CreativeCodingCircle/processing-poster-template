@@ -1,5 +1,3 @@
-import processing.pdf.*;
-
 // Resolution: 350dpi
 // Bleed: 3mm
 
@@ -29,30 +27,43 @@ import processing.pdf.*;
 // Round-trip postcard   (206mm * 154mm) : size(2839, 2122);
 // Large format postcard (241mm * 126mm) : size(3321, 1736);
 
-int bleedPx = 83;
-size(2976, 4175);
+import processing.pdf.*;
 
-textAlign(LEFT);
+int bleedPx = 83; // 3mm = 83px
+boolean isExportPDF = true;
 
+void setup() {
+  size(2976, 4175);
+  
+  textAlign(LEFT);
+}
 
-/* ---- PDF output ---- */
-beginRecord(PDF, "poster.pdf");
+void draw() {
+  if (isExportPDF) {
+    exportPDF();
+    exit();
+  } else {
+    drawPoster();
+    noLoop();
+  }
+}
 
-// Draw Background
-background(200);
+void drawPoster() {
+  background(255);
+  
+  // Sample
+  fill(0);
+  textSize(120);
+  text("text", 100, 200);
+  
+  // Draw Bleed line
+  stroke(150);
+  noFill();
+  rect(bleedPx, bleedPx, width-bleedPx*2, height-bleedPx*2);
+}
 
-// Sample
-fill(255);
-textSize(120);
-text("text", 100, 200);
-
-// Draw Bleed line
-noFill();
-stroke(0);
-rect(bleedPx, bleedPx, width-bleedPx*2, height-bleedPx*2);
-
-endRecord();
-
-
-println("PDF output successful");
-exit();
+void exportPDF() {
+  beginRecord(PDF, "Poster.pdf");
+  drawPoster();
+  endRecord();
+}
